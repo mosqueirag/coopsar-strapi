@@ -15,8 +15,7 @@ function renderRichText(content = "") {
 async function findArticle({ slug, documentId }) {
   if (slug) {
     const params = new URLSearchParams({
-      "filters[slug][$eq]": slug,
-      populate: "imagen_destacada",
+      slug,
     });
     const response = await fetch(`${FRONTEND_API}/noticias?${params.toString()}`);
     if (!response.ok) throw new Error(`Error ${response.status}`);

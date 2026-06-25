@@ -30,5 +30,17 @@ export default {
       handler: 'frontend.cortesProgramados',
       config: { auth: false },
     },
+    {
+      method: 'GET',
+      path: '/frontend/alertas-importantes',
+      handler: 'frontend.alertasImportantes',
+      config: { auth: false },
+    },
+    {
+      method: 'GET',
+      path: '/frontend/preguntas-frecuentes',
+      handler: 'frontend.preguntasFrecuentes',
+      config: { auth: false },
+    },
   ],
 };

@@ -3,7 +3,7 @@ type QueryParams = Record<string, string | number | boolean | undefined>;
 const DEFAULT_API_URL = 'http://localhost:1337';
 
 function apiBaseUrl() {
-  return (process.env.STRAPI_API_URL || DEFAULT_API_URL).replace(/\/$/, '');
+  return (process.env.STRAPI_URL || process.env.STRAPI_API_URL || DEFAULT_API_URL).replace(/\/$/, '');
 }
 
 function apiHeaders() {
@@ -11,8 +11,10 @@ function apiHeaders() {
     Accept: 'application/json',
   };
 
-  if (process.env.STRAPI_API_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.STRAPI_API_TOKEN}`;
+  const token = process.env.STRAPI_TOKEN || process.env.STRAPI_API_TOKEN;
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
   }
 
   return headers;
@@ -109,6 +111,24 @@ export default {
       'sort[0]': 'fecha:asc',
       populate: '*',
       'pagination[pageSize]': 8,
+    });
+  },
+
+  async alertasImportantes(ctx) {
+    await sendCollection(ctx, 'alertas-importantes', {
+      'sort[0]': 'prioridad:desc',
+      'sort[1]': 'publishedAt:desc',
+      populate: '*',
+      'pagination[pageSize]': 6,
+    });
+  },
+
+  async preguntasFrecuentes(ctx) {
+    await sendCollection(ctx, 'preguntas-frecuentes', {
+      'sort[0]': 'orden:asc',
+      'sort[1]': 'pregunta:asc',
+      populate: '*',
+      'pagination[pageSize]': 12,
     });
   },
 };

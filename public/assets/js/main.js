@@ -88,6 +88,15 @@ const fallback = {
   pagos: [
     { titulo: "Medios digitales", tipo: "Pago", resumen: "Modulo preparado para mostrar medios habilitados desde Strapi." },
   ],
+  alertas: [
+    { titulo: "Alertas importantes", resumen: "Comunicados urgentes y novedades operativas se mostraran en este espacio.", tipo: "Aviso", enlace: ROUTES.OUTAGES_URL },
+    { titulo: "Atencion por WhatsApp", resumen: "Canal directo para orientacion inicial y consultas frecuentes.", tipo: "Contacto", enlace: ROUTES.WHATSAPP_URL },
+  ],
+  preguntas: [
+    { pregunta: "Donde consulto mi deuda?", respuesta: "Desde el acceso Consultar deuda o la Oficina Virtual cuando este configurada." },
+    { pregunta: "Como informo un reclamo tecnico?", respuesta: "Ingresa a Reclamos tecnicos y completa los datos basicos del inconveniente." },
+    { pregunta: "Donde veo cortes programados?", respuesta: "La seccion Cortes programados muestra avisos operativos publicados desde Strapi." },
+  ],
 };
 
 function qs(selector, root = document) {
@@ -117,6 +126,33 @@ async function fetchContent(endpoint, params = {}) {
   if (!response.ok) throw new Error(payload?.error?.message || `No se pudo cargar ${endpoint}`);
   return payload.data || [];
 }
+
+const contentApi = {
+  list(endpoint, params = {}) {
+    return fetchContent(endpoint, params);
+  },
+  noticias(params = {}) {
+    return fetchContent("noticias", params);
+  },
+  servicios() {
+    return fetchContent("servicios");
+  },
+  tramites() {
+    return fetchContent("tramites");
+  },
+  cortesProgramados() {
+    return fetchContent("cortes-programados");
+  },
+  mediosDePago() {
+    return fetchContent("medios-de-pago");
+  },
+  alertasImportantes() {
+    return fetchContent("alertas-importantes");
+  },
+  preguntasFrecuentes() {
+    return fetchContent("preguntas-frecuentes");
+  },
+};
 
 function loading(message) {
   return `<p class="loading">${message}</p>`;
@@ -241,6 +277,20 @@ function procedureCard(item, index) {
   return `<article class="step-card"><span class="step-number">${index + 1}</span><h3>${escapeHTML(item.titulo || item.nombre)}</h3><p>${escapeHTML(item.resumen || item.descripcion || "Guia y requisitos disponibles desde Strapi.")}</p></article>`;
 }
 
+function alertCard(item) {
+  const title = item.titulo || item.nombre || "Alerta importante";
+  const text = item.resumen || item.descripcion || item.detalle || "Informacion importante publicada por COOPSAR.";
+  const href = item.enlace || item.url || ROUTES.OUTAGES_URL;
+  const type = item.tipo || item.categoria || "AV";
+  return `<article class="alert-banner"><span class="alert-mark">${escapeHTML(String(type).slice(0, 2).toUpperCase())}</span><div><strong>${escapeHTML(title)}</strong><p class="muted">${escapeHTML(text)}</p></div><a class="button-secondary" href="${escapeHTML(href)}">Ver</a></article>`;
+}
+
+function faqItem(item, index) {
+  const question = item.pregunta || item.titulo || "Pregunta frecuente";
+  const answer = item.respuesta || item.descripcion || item.contenido || "Respuesta administrable desde Strapi.";
+  return `<article class="faq-item ${index === 0 ? "is-open" : ""}"><button class="faq-trigger" type="button" aria-expanded="${index === 0 ? "true" : "false"}">${escapeHTML(question)}<span>+</span></button><div class="faq-panel">${escapeHTML(answer)}</div></article>`;
+}
+
 async function renderRemote(selector, endpoint, renderer, fallbackItems, loadingText, emptyText) {
   const node = qs(selector);
   if (!node) return;
@@ -279,8 +329,10 @@ function setupFilters() {
 }
 
 function setupFAQ() {
-  qsa("[data-faq] .faq-trigger").forEach(button => {
-    button.addEventListener("click", () => {
+  qsa("[data-faq]").forEach(list => {
+    list.addEventListener("click", event => {
+      const button = event.target.closest(".faq-trigger");
+      if (!button || !list.contains(button)) return;
       const item = button.closest(".faq-item");
       const open = item.classList.toggle("is-open");
       button.setAttribute("aria-expanded", String(open));
@@ -328,6 +380,8 @@ function renderStaticModules() {
   renderRemote("[data-outages-list]", "cortes-programados", outageCard, fallback.cortes, "Cargando cortes programados...", "No hay cortes programados.");
   renderRemote("[data-procedures-list]", "tramites", procedureCard, fallback.tramites, "Cargando tramites...", "No hay tramites publicados.");
   renderRemote("[data-payment-list]", "medios-de-pago", (item) => `<article class="card"><span class="small-label">${escapeHTML(item.tipo || "Medio de pago")}</span><h3>${escapeHTML(item.titulo || item.nombre)}</h3><p>${escapeHTML(item.resumen || item.descripcion || "Informacion administrable desde Strapi.")}</p></article>`, fallback.pagos, "Cargando medios de pago...", "No hay medios de pago publicados.");
+  renderRemote("[data-alerts-list]", "alertas-importantes", alertCard, fallback.alertas, "Cargando alertas importantes...", "No hay alertas importantes publicadas.");
+  renderRemote("[data-faq-list]", "preguntas-frecuentes", faqItem, fallback.preguntas, "Cargando preguntas frecuentes...", "No hay preguntas frecuentes publicadas.");
 }
 
 renderHeader();

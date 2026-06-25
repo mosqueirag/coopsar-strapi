@@ -2,6 +2,16 @@
 
 Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
 
+## Portal COOPSAR
+
+El frontend institucional se sirve desde `public/` y consume contenidos mediante el proxy backend `/api/frontend/*`.
+
+Documentacion de variables de entorno, endpoints y content-types requeridos:
+
+```text
+docs/strapi-content-types.md
+```
+
 ### `develop`
 
 Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)

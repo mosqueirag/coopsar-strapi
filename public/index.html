@@ -59,9 +59,8 @@
           <p>Este módulo puede conectarse a alertas operativas publicadas desde Strapi.</p>
           <span class="status-pill"><span class="status-dot"></span> Servicios activos</span>
         </article>
-        <div class="alert-list">
-          <article class="alert-banner"><span class="alert-mark">AV</span><div><strong>Alertas importantes</strong><p class="muted">Comunicados urgentes y novedades operativas se mostrarán en este espacio.</p></div><a class="button-secondary" href="/cortes-programados">Ver alertas</a></article>
-          <article class="alert-banner"><span class="alert-mark">WA</span><div><strong>Atención por WhatsApp</strong><p class="muted">Canal directo para orientación inicial y consultas frecuentes.</p></div><a class="button-secondary" href="https://wa.me/5492970000000">Escribir</a></article>
+        <div class="alert-list" data-alerts-list>
+          <p class="loading">Cargando alertas importantes...</p>
         </div>
       </div>
     </section>
@@ -113,10 +112,8 @@
     <section class="section section-white">
       <div class="container faq-grid">
         <div class="section-title"><span>Preguntas frecuentes</span><h2>Respuestas rápidas</h2><p>Información de orientación para usuarios y socios.</p></div>
-        <div class="faq-list" data-faq>
-          <article class="faq-item is-open"><button class="faq-trigger" type="button" aria-expanded="true">¿Dónde consulto mi deuda?<span>+</span></button><div class="faq-panel">Desde el acceso Consultar deuda o la Oficina Virtual cuando esté configurada.</div></article>
-          <article class="faq-item"><button class="faq-trigger" type="button" aria-expanded="false">¿Cómo informo un reclamo técnico?<span>+</span></button><div class="faq-panel">Ingresá a Reclamos técnicos y completá los datos básicos del inconveniente.</div></article>
-          <article class="faq-item"><button class="faq-trigger" type="button" aria-expanded="false">¿Dónde veo cortes programados?<span>+</span></button><div class="faq-panel">La sección Cortes programados muestra avisos operativos publicados desde Strapi.</div></article>
+        <div class="faq-list" data-faq data-faq-list>
+          <p class="loading">Cargando preguntas frecuentes...</p>
         </div>
       </div>
     </section>

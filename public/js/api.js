@@ -32,3 +32,11 @@ export async function getMediosDePago() {
 export async function getCortesProgramados() {
   return fetchFrontendCollection("cortes-programados");
 }
+
+export async function getAlertasImportantes() {
+  return fetchFrontendCollection("alertas-importantes");
+}
+
+export async function getPreguntasFrecuentes() {
+  return fetchFrontendCollection("preguntas-frecuentes");
+}
