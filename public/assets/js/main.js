@@ -120,6 +120,25 @@ function formatDate(value) {
   return date.toLocaleDateString("es-AR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+function relationItems(value) {
+  if (Array.isArray(value)) return value.map(item => item?.attributes ? { id: item.id, ...item.attributes } : item);
+  if (Array.isArray(value?.data)) return value.data.map(item => item?.attributes ? { id: item.id, ...item.attributes } : item);
+  return [];
+}
+
+function newsCategories(item) {
+  return relationItems(item.categorias)
+    .map(category => ({
+      nombre: category.nombre || category.titulo || category.name,
+      slug: category.slug || "",
+    }))
+    .filter(category => category.nombre);
+}
+
+function primaryCategory(item) {
+  return newsCategories(item)[0]?.nombre || item.servicio || "Institucional";
+}
+
 async function fetchContent(endpoint, params = {}) {
   const search = new URLSearchParams(params);
   const suffix = search.toString() ? `?${search}` : "";
@@ -135,6 +154,9 @@ const contentApi = {
   },
   noticias(params = {}) {
     return fetchContent("noticias", params);
+  },
+  categoriasNoticias() {
+    return fetchContent("categorias-noticias");
   },
   servicios() {
     return fetchContent("servicios");
@@ -274,8 +296,8 @@ function newsCard(item) {
   const date = formatDate(item.fecha_publicacion || item.publishedAt);
   const href = item.slug ? `/noticia.html?slug=${encodeURIComponent(item.slug)}` : "/noticias";
   const media = item.imagen_destacada;
-  const img = media?.formats?.medium?.url || media?.formats?.small?.url || media?.url || "/assets/images/noticia-placeholder.jpg";
-  return `<article class="news-card"><a href="${href}"><img class="news-image" src="${img}" alt="${escapeHTML(title)}"><div class="news-content"><div class="news-meta"><span>${escapeHTML(item.servicio || "Institucional")}</span>${date ? `<time>${date}</time>` : ""}</div><h3>${escapeHTML(title)}</h3><p>${escapeHTML(item.resumen || "Novedad publicada por COOPSAR.")}</p><span class="card-link">Leer mas</span></div></a></article>`;
+  const img = media?.formats?.medium?.url || media?.formats?.small?.url || media?.url || item.wp_imagen_original || "/assets/images/noticia-placeholder.jpg";
+  return `<article class="news-card"><a href="${href}"><img class="news-image" src="${escapeHTML(img)}" alt="${escapeHTML(title)}"><div class="news-content"><div class="news-meta"><span>${escapeHTML(primaryCategory(item))}</span>${date ? `<time>${date}</time>` : ""}</div><h3>${escapeHTML(title)}</h3><p>${escapeHTML(item.resumen || "Novedad publicada por COOPSAR.")}</p><span class="card-link">Leer mas</span></div></a></article>`;
 }
 
 function outageCard(item) {
@@ -316,22 +338,74 @@ async function renderRemote(selector, endpoint, renderer, fallbackItems, loading
   }
 }
 
-function setupFilters() {
-  const newsFilter = qs("[data-news-filter]");
-  if (newsFilter) {
-    newsFilter.addEventListener("change", async () => {
-      const grid = qs("[data-news-grid]");
-      grid.innerHTML = loading("Cargando noticias...");
-      try {
-        const data = await fetchContent("noticias", newsFilter.value ? { servicio: newsFilter.value } : {});
-        grid.innerHTML = data.length ? data.map(newsCard).join("") : empty("No hay noticias para este filtro.");
-        refreshAnimations(grid);
-      } catch {
-        grid.innerHTML = error("No se pudieron cargar las noticias.");
-        refreshAnimations(grid);
+function matchesNewsSearch(item, term) {
+  if (!term) return true;
+  const categories = newsCategories(item).map(category => category.nombre).join(" ");
+  const haystack = `${item.titulo || ""} ${item.resumen || ""} ${item.autor || ""} ${categories}`.toLowerCase();
+  return haystack.includes(term);
+}
+
+function setupNewsSections() {
+  qsa("[data-news-grid]").forEach(async grid => {
+    const scope = grid.closest("section") || document;
+    const categoryFilter = qs("[data-category-filter]", scope);
+    const searchInput = qs("[data-news-search]", scope);
+    const loadMoreButton = qs("[data-load-more]", scope);
+    const pageSize = Number(grid.dataset.pageSize || 9);
+    const state = { items: [], visible: pageSize };
+
+    function filteredItems() {
+      const category = categoryFilter?.value || "";
+      const term = (searchInput?.value || "").trim().toLowerCase();
+      return state.items
+        .filter(item => !category || newsCategories(item).some(itemCategory => itemCategory.slug === category))
+        .filter(item => matchesNewsSearch(item, term))
+        .sort((a, b) => new Date(b.fecha_publicacion || b.publishedAt || 0) - new Date(a.fecha_publicacion || a.publishedAt || 0));
+    }
+
+    function render() {
+      const items = filteredItems();
+      const visibleItems = items.slice(0, state.visible);
+      grid.innerHTML = visibleItems.length ? visibleItems.map(newsCard).join("") : empty("No hay noticias para esta busqueda.");
+      if (loadMoreButton) loadMoreButton.hidden = visibleItems.length >= items.length;
+      refreshAnimations(grid);
+    }
+
+    grid.innerHTML = loading("Cargando noticias...");
+
+    try {
+      const [items, categories] = await Promise.all([
+        contentApi.noticias({ pageSize: 500 }),
+        categoryFilter ? contentApi.categoriasNoticias().catch(() => []) : Promise.resolve([]),
+      ]);
+      state.items = items.length ? items : fallback.noticias;
+
+      if (categoryFilter && categories.length) {
+        categoryFilter.innerHTML = `<option value="">Todas las categorias</option>${categories.map(category => `<option value="${escapeHTML(category.slug)}">${escapeHTML(category.nombre)}</option>`).join("")}`;
       }
-    });
-  }
+
+      categoryFilter?.addEventListener("change", () => {
+        state.visible = pageSize;
+        render();
+      });
+      searchInput?.addEventListener("input", () => {
+        state.visible = pageSize;
+        render();
+      });
+      loadMoreButton?.addEventListener("click", () => {
+        state.visible += pageSize;
+        render();
+      });
+      render();
+    } catch (err) {
+      console.warn(err);
+      grid.innerHTML = error("No se pudieron cargar las noticias. Revisa la conexion con Strapi y los permisos del token.");
+      refreshAnimations(grid);
+    }
+  });
+}
+
+function setupFilters() {
   const outageFilter = qs("[data-outage-filter]");
   if (outageFilter) {
     outageFilter.addEventListener("input", () => {
@@ -389,7 +463,7 @@ function setupShareButtons() {
 function renderStaticModules() {
   renderQuickLinks();
   renderRemote("[data-services-grid]", "servicios", serviceCard, fallback.servicios.map(([imagen, titulo, resumen]) => ({ imagen: `/assets/images/${imagen}`, titulo, resumen })), "Cargando servicios...", "No hay servicios publicados.");
-  renderRemote("[data-news-grid]", "noticias", newsCard, fallback.noticias, "Cargando noticias...", "No hay noticias publicadas.");
+  setupNewsSections();
   renderRemote("[data-outages-list]", "cortes-programados", outageCard, fallback.cortes, "Cargando cortes programados...", "No hay cortes programados.");
   renderRemote("[data-procedures-list]", "tramites", procedureCard, fallback.tramites, "Cargando tramites...", "No hay tramites publicados.");
   renderRemote("[data-payment-list]", "medios-de-pago", (item) => `<article class="card"><span class="small-label">${escapeHTML(item.tipo || "Medio de pago")}</span><h3>${escapeHTML(item.titulo || item.nombre)}</h3><p>${escapeHTML(item.resumen || item.descripcion || "Informacion administrable desde Strapi.")}</p></article>`, fallback.pagos, "Cargando medios de pago...", "No hay medios de pago publicados.");

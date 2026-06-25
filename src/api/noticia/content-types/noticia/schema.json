@@ -32,6 +32,12 @@
       "multiple": false,
       "allowedTypes": ["images"]
     },
+    "categorias": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::categoria-noticia.categoria-noticia",
+      "inversedBy": "noticias"
+    },
     "servicio": {
       "type": "enumeration",
       "enum": [
@@ -44,6 +50,19 @@
     },
     "fecha_publicacion": {
       "type": "datetime"
+    },
+    "autor": {
+      "type": "string"
+    },
+    "wp_id_original": {
+      "type": "integer",
+      "unique": true
+    },
+    "wp_url_original": {
+      "type": "string"
+    },
+    "wp_imagen_original": {
+      "type": "string"
     }
   }
 }

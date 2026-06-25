@@ -103,9 +103,9 @@
       <div class="container">
         <div class="section-heading">
           <div class="section-title"><span>Noticias destacadas</span><h2>Novedades institucionales</h2><p>Contenido conectado a Strapi.</p></div>
-          <div class="toolbar"><select data-news-filter><option value="">Todas</option><option>Energia</option><option>Telecomunicaciones</option><option>Sepelio</option><option>Institucional</option><option>ADECOOP</option></select><a class="button-secondary" href="/noticias">Ver noticias</a></div>
+          <div class="toolbar news-toolbar"><input type="search" data-news-search placeholder="Buscar noticias" aria-label="Buscar noticias"><select data-category-filter aria-label="Filtrar por categoria"><option value="">Todas las categorias</option></select><a class="button-secondary" href="/noticias">Ver noticias</a></div>
         </div>
-        <div class="news-grid" data-news-grid></div>
+        <div class="news-grid" data-news-grid data-page-size="3"></div>
       </div>
     </section>
 

@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categorias_noticias",
+  "info": {
+    "singularName": "categoria-noticia",
+    "pluralName": "categorias-noticias",
+    "displayName": "Categoria noticia",
+    "description": "Categorias importadas o administradas para noticias"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nombre",
+      "required": true
+    },
+    "descripcion": {
+      "type": "text"
+    },
+    "wp_slug_original": {
+      "type": "string"
+    },
+    "noticias": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::noticia.noticia",
+      "mappedBy": "categorias"
+    }
+  }
+}

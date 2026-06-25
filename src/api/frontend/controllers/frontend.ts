@@ -67,15 +67,25 @@ async function sendCollection(ctx, collection: string, params: QueryParams = {})
 export default {
   async noticias(ctx) {
     const servicio = ctx.query?.servicio;
+    const categoria = ctx.query?.categoria;
     const slug = ctx.query?.slug || ctx.query?.filters?.slug?.$eq;
 
     await sendCollection(ctx, 'noticias', {
       'sort[0]': 'fecha_publicacion:desc',
       'sort[1]': 'publishedAt:desc',
-      populate: 'imagen_destacada',
-      'pagination[pageSize]': 6,
+      'populate[imagen_destacada]': 'true',
+      'populate[categorias]': 'true',
+      'pagination[pageSize]': ctx.query?.pageSize || 24,
       'filters[servicio][$eq]': typeof servicio === 'string' ? servicio : undefined,
+      'filters[categorias][slug][$eq]': typeof categoria === 'string' ? categoria : undefined,
       'filters[slug][$eq]': typeof slug === 'string' ? slug : undefined,
+    });
+  },
+
+  async categoriasNoticias(ctx) {
+    await sendCollection(ctx, 'categorias-noticias', {
+      'sort[0]': 'nombre:asc',
+      'pagination[pageSize]': 100,
     });
   },
 

@@ -440,6 +440,40 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCategoriaNoticiaCategoriaNoticia
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'categorias_noticias';
+  info: {
+    description: 'Categorias importadas o administradas para noticias';
+    displayName: 'Categoria noticia';
+    pluralName: 'categorias-noticias';
+    singularName: 'categoria-noticia';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::categoria-noticia.categoria-noticia'
+    > &
+      Schema.Attribute.Private;
+    nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    noticias: Schema.Attribute.Relation<'manyToMany', 'api::noticia.noticia'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    wp_slug_original: Schema.Attribute.String;
+  };
+}
+
 export interface ApiNoticiaNoticia extends Struct.CollectionTypeSchema {
   collectionName: 'noticias';
   info: {
@@ -452,6 +486,11 @@ export interface ApiNoticiaNoticia extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    autor: Schema.Attribute.String;
+    categorias: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::categoria-noticia.categoria-noticia'
+    >;
     contenido: Schema.Attribute.RichText & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -474,6 +513,9 @@ export interface ApiNoticiaNoticia extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    wp_id_original: Schema.Attribute.Integer & Schema.Attribute.Unique;
+    wp_imagen_original: Schema.Attribute.String;
+    wp_url_original: Schema.Attribute.String;
   };
 }
 
@@ -988,6 +1030,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::categoria-noticia.categoria-noticia': ApiCategoriaNoticiaCategoriaNoticia;
       'api::noticia.noticia': ApiNoticiaNoticia;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

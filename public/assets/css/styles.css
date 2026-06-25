@@ -671,6 +671,16 @@ textarea {
   font-weight: 700;
 }
 
+.news-toolbar input {
+  flex: 1 1 260px;
+}
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
 .news-card a {
   min-height: 100%;
   display: flex;
@@ -916,6 +926,45 @@ textarea {
   color: var(--ink);
   font-size: 18px;
   line-height: 1.85;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.detail-label {
+  color: var(--green-700);
+}
+
+.detail-summary {
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.65;
+}
+
+.detail-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.detail-content a {
+  color: var(--green-700);
+  font-weight: 800;
+}
+
+.related-news {
+  margin-top: 46px;
+}
+
+.compact-heading {
+  margin-bottom: 18px;
 }
 
 .footer {

@@ -8,6 +8,12 @@ export default {
     },
     {
       method: 'GET',
+      path: '/frontend/categorias-noticias',
+      handler: 'frontend.categoriasNoticias',
+      config: { auth: false },
+    },
+    {
+      method: 'GET',
       path: '/frontend/servicios',
       handler: 'frontend.servicios',
       config: { auth: false },
