@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Noticias, comunicados y novedades institucionales de COOPSAR.">
   <title>COOPSAR | Noticias</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
@@ -10,15 +11,15 @@
 
   <header class="site-header">
     <div class="container header-content">
-      <div class="brand">
+      <a class="brand" href="/" aria-label="Ir al inicio">
         <span class="brand-icon">C</span>
-        <div>
+        <span>
           <strong>COOPSAR</strong>
           <small>Noticias institucionales</small>
-        </div>
-      </div>
+        </span>
+      </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegacion principal">
         <a href="/">Inicio</a>
         <a href="#noticias">Noticias</a>
         <a href="#contacto">Contacto</a>
@@ -30,10 +31,10 @@
     <section class="hero">
       <div class="container hero-content">
         <span class="eyebrow">Cooperativa de Sarmiento</span>
-        <h1>Información clara, actualizada y cercana a la comunidad.</h1>
+        <h1>Informacion clara y cercana para la comunidad.</h1>
         <p>
           Comunicados, novedades institucionales y noticias importantes
-          publicadas desde nuestro CMS.
+          publicadas desde Strapi.
         </p>
         <a href="#noticias" class="btn">Ver noticias</a>
       </div>
@@ -41,10 +42,20 @@
 
     <section class="section" id="noticias">
       <div class="container">
-        <div class="section-title">
-          <span>Actualidad</span>
-          <h2>Últimas noticias</h2>
-          <p>Contenido cargado dinámicamente desde Strapi.</p>
+        <div class="section-heading">
+          <div class="section-title">
+            <span>Actualidad</span>
+            <h2>Ultimas noticias</h2>
+            <p>Contenido actualizado desde el CMS de COOPSAR.</p>
+          </div>
+
+          <div class="toolbar" aria-label="Filtros de noticias">
+            <label for="servicioFiltro">Servicio</label>
+            <select id="servicioFiltro">
+              <option value="">Todos</option>
+            </select>
+            <span id="noticiasEstado" class="results-count" aria-live="polite"></span>
+          </div>
         </div>
 
         <div id="noticiasGrid" class="news-grid">
@@ -56,18 +67,21 @@
     <section class="info-section">
       <div class="container info-grid">
         <article>
+          <span>01</span>
           <h3>Servicios</h3>
-          <p>Información vinculada a energía, telecomunicaciones, pagos y atención.</p>
+          <p>Informacion vinculada a energia, telecomunicaciones, pagos y atencion.</p>
         </article>
 
         <article>
+          <span>02</span>
           <h3>Comunicados</h3>
           <p>Avisos importantes para socios, usuarios y comunidad en general.</p>
         </article>
 
         <article>
+          <span>03</span>
           <h3>Institucional</h3>
-          <p>Novedades de gestión, actividades y acciones de la cooperativa.</p>
+          <p>Novedades de gestion, actividades y acciones de la cooperativa.</p>
         </article>
       </div>
     </section>
@@ -75,7 +89,7 @@
 
   <footer class="footer" id="contacto">
     <div class="container footer-content">
-      <p>© COOPSAR - Sarmiento, Chubut</p>
+      <p>COOPSAR - Sarmiento, Chubut</p>
       <p>Noticias cargadas desde Strapi CMS</p>
     </div>
   </footer>
