@@ -65,6 +65,7 @@ async function sendCollection(ctx, collection: string, params: QueryParams = {})
 export default {
   async noticias(ctx) {
     const servicio = ctx.query?.servicio;
+    const slug = ctx.query?.slug || ctx.query?.filters?.slug?.$eq;
 
     await sendCollection(ctx, 'noticias', {
       'sort[0]': 'fecha_publicacion:desc',
@@ -72,6 +73,7 @@ export default {
       populate: 'imagen_destacada',
       'pagination[pageSize]': 6,
       'filters[servicio][$eq]': typeof servicio === 'string' ? servicio : undefined,
+      'filters[slug][$eq]': typeof slug === 'string' ? slug : undefined,
     });
   },
 

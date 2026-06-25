@@ -140,7 +140,7 @@ function renderHeader() {
       <nav class="desktop-nav" aria-label="Navegacion principal">
         ${navGroups.map(group => `
           <div class="nav-item">
-            <a class="nav-link" href="#">${group.label}</a>
+            <a class="nav-link" href="${group.links[0][1]}">${group.label}</a>
             <div class="mega-menu">
               <div class="mega-feature"><strong>${group.label}</strong><span>${group.intro}</span></div>
               <div class="mega-links">${group.links.map(([label, href, text]) => `<a href="${href}"><strong>${label}</strong><span>${text}</span></a>`).join("")}</div>
@@ -168,9 +168,9 @@ function renderFooter() {
         <form class="newsletter" data-newsletter><input type="email" placeholder="Tu email" required><button class="button" type="submit">Suscribirme</button></form>
         <p class="form-message" data-newsletter-message></p>
       </div>
-      <div><h3>Gestion</h3><a href="${ROUTES.PAYMENT_URL}">Facturas y pagos</a><a href="${ROUTES.DEBT_URL}">Consultar deuda</a><a href="/tramites.html">Tramites</a></div>
+      <div><h3>Gestion</h3><a href="${ROUTES.PAYMENT_URL}">Facturas y pagos</a><a href="${ROUTES.DEBT_URL}">Consultar deuda</a><a href="/tramites">Tramites</a></div>
       <div><h3>Atencion</h3><a href="${ROUTES.CLAIMS_URL}">Reclamos tecnicos</a><a href="${ROUTES.OUTAGES_URL}">Cortes programados</a><a href="${ROUTES.CONTACT_URL}">Contacto</a></div>
-      <div><h3>Comunidad</h3><a href="${ROUTES.NEWS_URL}">Noticias</a><a href="${ROUTES.ADECOOP_URL}">ADECOOP</a><a href="/institucional.html">Institucional</a><a href="${ROUTES.INSTAGRAM_URL}">Instagram</a></div>
+      <div><h3>Comunidad</h3><a href="${ROUTES.NEWS_URL}">Noticias</a><a href="${ROUTES.ADECOOP_URL}">ADECOOP</a><a href="/institucional">Institucional</a><a href="${ROUTES.INSTAGRAM_URL}">Instagram</a></div>
     </div>
     <div class="container footer-bottom"><span>COOPSAR - Sitio institucional</span><span>Contenido conectado a Strapi</span></div>
   `;
