@@ -1,165 +1,142 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sitio institucional de COOPSAR: servicios, tramites, facturas, pagos, reclamos, cortes programados y noticias.">
-  <title>COOPSAR | Cooperativa de Sarmiento</title>
-  <link rel="stylesheet" href="/styles.css">
+  <meta name="description" content="Portal institucional y de autogestiÃ³n de COOPSAR.">
+  <title>COOPSAR | Portal institucional</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body>
-  <header id="siteHeader" class="site-header"></header>
+  <header class="site-header" data-header></header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="inicio">
       <div class="container hero-grid">
-        <div class="hero-copy">
-          <span class="eyebrow">Cooperativa de Sarmiento</span>
-          <h1>Servicios esenciales, atencion cercana y gestion simple.</h1>
-          <p>
-            Un espacio digital para consultar novedades, iniciar tramites,
-            pagar facturas y recibir informacion operativa de COOPSAR.
-          </p>
-          <form id="helpSearch" class="help-search" role="search">
-            <label for="helpInput">¿Como podemos ayudarte hoy?</label>
-            <div>
-              <input id="helpInput" type="search" placeholder="Buscar facturas, pagos, reclamos, cortes..." autocomplete="off">
+        <div class="hero-content">
+          <span class="eyebrow">Portal de autogestiÃ³n</span>
+          <h1>GestionÃ¡ tus servicios de COOPSAR de forma simple</h1>
+          <p>AccedÃ© a tus facturas, medios de pago, reclamos tÃ©cnicos, trÃ¡mites, cortes programados y novedades institucionales desde un solo lugar.</p>
+          <form class="help-search" data-help-search role="search">
+            <label for="helpInput">Â¿CÃ³mo podemos ayudarte hoy?</label>
+            <div class="search-row">
+              <input id="helpInput" type="search" placeholder="BuscÃ¡ trÃ¡mites, pagos, reclamos, cortes o servicios" autocomplete="off">
               <button type="submit">Buscar</button>
             </div>
+            <div class="suggestion-list" data-suggestions></div>
           </form>
         </div>
-
-        <aside class="hero-panel" aria-label="Atajos principales">
-          <span>Gestion rapida</span>
-          <h2>Todo lo importante en un solo lugar.</h2>
-          <div id="heroQuickLinks" class="hero-actions"></div>
+        <aside class="hero-card">
+          <span class="small-label">Acceso destacado</span>
+          <h2>Oficina Virtual</h2>
+          <p>IngresÃ¡ para gestionar consultas, solicitudes y accesos de autogestiÃ³n.</p>
+          <div class="button-row">
+            <a class="button" href="/oficina-virtual">Entrar</a>
+            <a class="button-secondary" href="/contacto">Necesito ayuda</a>
+          </div>
         </aside>
       </div>
     </section>
 
-    <section class="quick-section" aria-labelledby="quickTitle">
+    <section class="section">
       <div class="container">
         <div class="section-heading">
           <div class="section-title">
-            <span>Accesos rapidos</span>
-            <h2 id="quickTitle">Resolvelo en pocos pasos</h2>
+            <span>Accesos rÃ¡pidos</span>
+            <h2>ResolvÃ© tus gestiones frecuentes</h2>
+            <p>Atajos directos para las operaciones mÃ¡s buscadas.</p>
           </div>
-          <p class="section-note">Consultas frecuentes para socios, usuarios y comercios.</p>
         </div>
-        <div id="quickAccessGrid" class="quick-grid"></div>
+        <div class="quick-grid" data-quick-links></div>
       </div>
     </section>
 
-    <section id="servicios" class="section">
+    <section class="section section-white">
+      <div class="container status-grid">
+        <article class="status-card">
+          <span class="small-label">Estado del servicio</span>
+          <h2>OperaciÃ³n normal</h2>
+          <p>Este mÃ³dulo puede conectarse a alertas operativas publicadas desde Strapi.</p>
+          <span class="status-pill"><span class="status-dot"></span> Servicios activos</span>
+        </article>
+        <div class="alert-list">
+          <article class="alert-banner"><span class="alert-mark">AV</span><div><strong>Alertas importantes</strong><p class="muted">Comunicados urgentes y novedades operativas se mostrarÃ¡n en este espacio.</p></div><a class="button-secondary" href="/cortes-programados">Ver alertas</a></article>
+          <article class="alert-banner"><span class="alert-mark">WA</span><div><strong>AtenciÃ³n por WhatsApp</strong><p class="muted">Canal directo para orientaciÃ³n inicial y consultas frecuentes.</p></div><a class="button-secondary" href="https://wa.me/5492970000000">Escribir</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicios">
       <div class="container">
         <div class="section-heading">
-          <div class="section-title">
-            <span>Servicios</span>
-            <h2>Prestaciones para la comunidad</h2>
-          </div>
-          <a class="pill-link" href="#contacto">Consultar atencion</a>
+          <div class="section-title"><span>Servicios</span><h2>Prestaciones para la comunidad</h2><p>InformaciÃ³n clara sobre los servicios principales de COOPSAR.</p></div>
+          <a class="button-secondary" href="/servicios">Ver todos</a>
         </div>
-        <div id="servicesGrid" class="card-grid"></div>
+        <div class="services-grid" data-services-grid></div>
       </div>
     </section>
 
-    <section id="tramites" class="section section-muted">
-      <div class="container two-column">
+    <section class="section section-white">
+      <div class="container split-grid">
         <div>
-          <div class="section-title">
-            <span>Tramites</span>
-            <h2>Gestion online y atencion presencial</h2>
-            <p>El front queda preparado para alimentar estos contenidos desde Strapi.</p>
-          </div>
-          <div id="proceduresList" class="stack-list"></div>
+          <div class="section-title"><span>Facturas y pagos</span><h2>ConsultÃ¡ deuda y medios de pago</h2><p>Accesos preparados para integrar medios habilitados, portal de deuda y autogestiÃ³n.</p></div>
+          <div class="button-row"><a class="button" href="/facturas-y-pagos">Medios de pago</a><a class="button-secondary" href="/consultar-deuda">Consultar deuda</a></div>
         </div>
-        <aside class="payment-card" id="facturas">
-          <span>Facturas y pagos</span>
-          <h3>Consulta tu deuda o solicita medios de pago.</h3>
-          <p>Conecta este modulo a un portal de autogestion o a un enlace externo cuando este disponible.</p>
-          <div id="paymentMethodsList" class="payment-methods">
-            <p class="loading">Cargando medios de pago...</p>
-          </div>
-          <div class="payment-actions">
-            <a href="#contacto">Solicitar ayuda</a>
-            <a href="#tramites">Ver tramites</a>
-          </div>
-        </aside>
+        <div class="grid-2" data-payment-list></div>
       </div>
     </section>
 
-    <section id="reclamos" class="section">
+    <section class="section">
+      <div class="container">
+        <div class="section-heading"><div class="section-title"><span>TrÃ¡mites</span><h2>GuÃ­a paso a paso</h2><p>OrientaciÃ³n inicial para gestionar solicitudes frecuentes.</p></div><a class="button-secondary" href="/tramites">Ver trÃ¡mites</a></div>
+        <div class="steps" data-procedures-list></div>
+      </div>
+    </section>
+
+    <section class="section section-white">
       <div class="container operations-grid">
-        <article class="claim-card">
-          <span>Reclamos tecnicos</span>
-          <h2>Reporta inconvenientes de servicio.</h2>
-          <p>Canaliza cortes, baja tension, problemas de conectividad o consultas operativas.</p>
-          <a class="button-pill" href="#contacto">Iniciar reclamo</a>
-        </article>
-
-        <article id="cortes" class="outages-card">
-          <div class="section-title compact">
-            <span>Cortes programados</span>
-            <h2>Alertas operativas</h2>
-          </div>
-          <div id="outagesList" class="outages-list"></div>
-        </article>
+        <article class="card"><span class="small-label">Reclamos tÃ©cnicos</span><h2>ReportÃ¡ inconvenientes de servicio</h2><p class="muted">Canal para cortes, baja tensiÃ³n, conectividad u otros problemas operativos.</p><div class="button-row"><a class="button" href="/reclamos">Iniciar reclamo</a><a class="button-secondary" href="https://wa.me/5492970000000">WhatsApp</a></div></article>
+        <article class="card"><span class="small-label">Cortes programados</span><h2>Avisos operativos destacados</h2><div class="alert-list" data-outages-list></div></article>
       </div>
     </section>
 
-    <section id="noticias" class="section section-muted">
+    <section class="section" id="noticias">
       <div class="container">
         <div class="section-heading">
-          <div class="section-title">
-            <span>Noticias</span>
-            <h2>Actualidad institucional</h2>
-            <p>Noticias cargadas desde Strapi cuando esten publicadas.</p>
-          </div>
-          <div class="toolbar" aria-label="Filtros de noticias">
-            <label for="servicioFiltro">Servicio</label>
-            <select id="servicioFiltro">
-              <option value="">Todos</option>
-            </select>
-            <span id="noticiasEstado" class="results-count" aria-live="polite"></span>
-          </div>
+          <div class="section-title"><span>Noticias destacadas</span><h2>Novedades institucionales</h2><p>Contenido conectado a Strapi.</p></div>
+          <div class="toolbar"><select data-news-filter><option value="">Todas</option><option>Energia</option><option>Telecomunicaciones</option><option>Sepelio</option><option>Institucional</option><option>ADECOOP</option></select><a class="button-secondary" href="/noticias">Ver noticias</a></div>
         </div>
-        <div id="noticiasGrid" class="news-grid">
-          <p class="loading">Cargando noticias...</p>
+        <div class="news-grid" data-news-grid></div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container faq-grid">
+        <div class="section-title"><span>Preguntas frecuentes</span><h2>Respuestas rÃ¡pidas</h2><p>InformaciÃ³n de orientaciÃ³n para usuarios y socios.</p></div>
+        <div class="faq-list" data-faq>
+          <article class="faq-item is-open"><button class="faq-trigger" type="button" aria-expanded="true">Â¿DÃ³nde consulto mi deuda?<span>+</span></button><div class="faq-panel">Desde el acceso Consultar deuda o la Oficina Virtual cuando estÃ© configurada.</div></article>
+          <article class="faq-item"><button class="faq-trigger" type="button" aria-expanded="false">Â¿CÃ³mo informo un reclamo tÃ©cnico?<span>+</span></button><div class="faq-panel">IngresÃ¡ a Reclamos tÃ©cnicos y completÃ¡ los datos bÃ¡sicos del inconveniente.</div></article>
+          <article class="faq-item"><button class="faq-trigger" type="button" aria-expanded="false">Â¿DÃ³nde veo cortes programados?<span>+</span></button><div class="faq-panel">La secciÃ³n Cortes programados muestra avisos operativos publicados desde Strapi.</div></article>
         </div>
       </div>
     </section>
 
-    <section id="adecoop" class="section adecoop-section">
+    <section class="section">
       <div class="container adecoop-grid">
-        <div>
-          <span class="eyebrow dark">ADECOOP</span>
-          <h2>Beneficios, actividades y comunidad cooperativa.</h2>
-          <p>
-            Un espacio para destacar iniciativas sociales, educativas,
-            culturales y beneficios vinculados a la cooperativa.
-          </p>
-        </div>
-        <div class="adecoop-card">
-          <h3>Proximo paso</h3>
-          <p>Crear en Strapi una coleccion para beneficios o actividades ADECOOP y renderizarla en este bloque.</p>
-        </div>
+        <div><span class="small-label">ADECOOP</span><h2>Beneficios y comunidad cooperativa</h2><p class="muted">Un espacio para iniciativas sociales, educativas, culturales y beneficios para la comunidad.</p><div class="button-row"><a class="button" href="/adecoop">Conocer ADECOOP</a></div></div>
+        <img class="service-image" src="/assets/images/adecoop.jpg" alt="ADECOOP COOPSAR">
       </div>
     </section>
 
-    <section id="contacto" class="section contact-section">
-      <div class="container contact-grid">
-        <div class="section-title">
-          <span>Contacto</span>
-          <h2>Estamos para orientarte</h2>
-          <p>Centraliza telefonos, horarios, direccion, guardias y canales digitales.</p>
-        </div>
-        <div id="contactCards" class="contact-cards"></div>
+    <section class="section section-white">
+      <div class="container contact-layout">
+        <div><div class="section-title"><span>Canales de atenciÃ³n</span><h2>Estamos para orientarte</h2><p>ElegÃ­ el canal mÃ¡s conveniente para tu consulta.</p></div><div class="channels-grid"><article class="contact-card"><h3>WhatsApp</h3><p>OrientaciÃ³n inicial y consultas frecuentes.</p><a href="https://wa.me/5492970000000">Escribir</a></article><article class="contact-card"><h3>Oficina Virtual</h3><p>AutogestiÃ³n y solicitudes online.</p><a href="/oficina-virtual">Ingresar</a></article><article class="contact-card"><h3>Contacto</h3><p>Formulario y ubicaciÃ³n institucional.</p><a href="/contacto">Ver contacto</a></article></div></div>
+        <div class="map-placeholder"><div><strong>Mapa de ubicaciÃ³n</strong><p class="muted">Placeholder para integrar mapa institucional.</p></div></div>
       </div>
     </section>
   </main>
 
-  <footer id="siteFooter" class="footer"></footer>
-
-  <script type="module" src="/js/app.js"></script>
+  <footer class="footer" data-footer></footer>
+  <script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>
