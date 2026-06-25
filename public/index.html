@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias COOPSAR</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-contenedor">
+      <div class="logo">COOPSAR</div>
+      <nav class="nav">
+        <a href="/">Inicio</a>
+        <a href="/api/noticias" target="_blank">API Noticias</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Noticias</h1>
+    <p>Información institucional, comunicados y novedades para nuestra comunidad.</p>
+  </section>
+
+  <main class="contenedor">
+    <div class="seccion-titulo">
+      <h2>Últimas noticias</h2>
+      <p>Contenido cargado desde Strapi CMS.</p>
+    </div>
+
+    <section id="noticias" class="grid-noticias">
+      <p>Cargando noticias...</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© COOPSAR - Sarmiento, Chubut</p>
+  </footer>
+
+  <script>
+    const API_URL = "/api/noticias";
+
+    async function cargarNoticias() {
+      const contenedor = document.getElementById("noticias");
+
+      try {
+        const respuesta = await fetch(API_URL);
+        const resultado = await respuesta.json();
+
+        contenedor.innerHTML = "";
+
+        resultado.data.forEach(noticia => {
+          const card = document.createElement("article");
+          card.className = "card-noticia";
+
+          card.innerHTML = `
+            <div class="card-contenido">
+              <h3>${noticia.titulo}</h3>
+              <p>${noticia.resumen || ""}</p>
+              <a class="boton" href="/api/noticias/${noticia.documentId}" target="_blank">Leer más</a>
+            </div>
+          `;
+
+          contenedor.appendChild(card);
+        });
+
+      } catch (error) {
+        contenedor.innerHTML = "<p>No se pudieron cargar las noticias.</p>";
+        console.error(error);
+      }
+    }
+
+    cargarNoticias();
+  </script>
+
+</body>
+</html>
