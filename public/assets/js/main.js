@@ -1,3 +1,5 @@
+import { initAnimations, refreshAnimations } from "/assets/js/animations.js";
+
 const ROUTES = {
   OFFICE_URL: "/oficina-virtual",
   WHATSAPP_URL: "https://wa.me/5492970000000",
@@ -221,6 +223,13 @@ function setupMobileMenu() {
     document.body.classList.toggle("menu-open", open);
     toggle.setAttribute("aria-expanded", String(open));
   });
+
+  menu.addEventListener("click", (event) => {
+    if (!event.target.closest("a")) return;
+    menu.classList.remove("is-open");
+    document.body.classList.remove("menu-open");
+    toggle.setAttribute("aria-expanded", "false");
+  });
 }
 
 function setupHelpSearch() {
@@ -299,9 +308,11 @@ async function renderRemote(selector, endpoint, renderer, fallbackItems, loading
     const data = await fetchContent(endpoint);
     const items = data.length ? data : fallbackItems;
     node.innerHTML = items.length ? items.map(renderer).join("") : empty(emptyText);
+    refreshAnimations(node);
   } catch (err) {
     console.warn(err);
     node.innerHTML = error("Revisa la conexion con Strapi, las variables de entorno y los permisos del token.");
+    refreshAnimations(node);
   }
 }
 
@@ -314,8 +325,10 @@ function setupFilters() {
       try {
         const data = await fetchContent("noticias", newsFilter.value ? { servicio: newsFilter.value } : {});
         grid.innerHTML = data.length ? data.map(newsCard).join("") : empty("No hay noticias para este filtro.");
+        refreshAnimations(grid);
       } catch {
         grid.innerHTML = error("No se pudieron cargar las noticias.");
+        refreshAnimations(grid);
       }
     });
   }
@@ -393,3 +406,4 @@ setupFilters();
 setupFAQ();
 setupForms();
 setupShareButtons();
+initAnimations();
