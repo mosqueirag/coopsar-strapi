@@ -3,76 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noticias COOPSAR</title>
+  <title>COOPSAR | Noticias</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
-  <header class="header">
-    <div class="header-contenedor">
-      <div class="logo">COOPSAR</div>
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="brand">
+        <span class="brand-icon">C</span>
+        <div>
+          <strong>COOPSAR</strong>
+          <small>Noticias institucionales</small>
+        </div>
+      </div>
+
       <nav class="nav">
         <a href="/">Inicio</a>
-        <a href="/api/noticias" target="_blank">API Noticias</a>
+        <a href="#noticias">Noticias</a>
+        <a href="#contacto">Contacto</a>
       </nav>
     </div>
   </header>
 
-  <section class="hero">
-    <h1>Noticias</h1>
-    <p>Información institucional, comunicados y novedades para nuestra comunidad.</p>
-  </section>
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <span class="eyebrow">Cooperativa de Sarmiento</span>
+        <h1>Información clara, actualizada y cercana a la comunidad.</h1>
+        <p>
+          Comunicados, novedades institucionales y noticias importantes
+          publicadas desde nuestro CMS.
+        </p>
+        <a href="#noticias" class="btn">Ver noticias</a>
+      </div>
+    </section>
 
-  <main class="contenedor">
-    <div class="seccion-titulo">
-      <h2>Últimas noticias</h2>
-      <p>Contenido cargado desde Strapi CMS.</p>
-    </div>
+    <section class="section" id="noticias">
+      <div class="container">
+        <div class="section-title">
+          <span>Actualidad</span>
+          <h2>Últimas noticias</h2>
+          <p>Contenido cargado dinámicamente desde Strapi.</p>
+        </div>
 
-    <section id="noticias" class="grid-noticias">
-      <p>Cargando noticias...</p>
+        <div id="noticiasGrid" class="news-grid">
+          <p class="loading">Cargando noticias...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="container info-grid">
+        <article>
+          <h3>Servicios</h3>
+          <p>Información vinculada a energía, telecomunicaciones, pagos y atención.</p>
+        </article>
+
+        <article>
+          <h3>Comunicados</h3>
+          <p>Avisos importantes para socios, usuarios y comunidad en general.</p>
+        </article>
+
+        <article>
+          <h3>Institucional</h3>
+          <p>Novedades de gestión, actividades y acciones de la cooperativa.</p>
+        </article>
+      </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <p>© COOPSAR - Sarmiento, Chubut</p>
+  <footer class="footer" id="contacto">
+    <div class="container footer-content">
+      <p>© COOPSAR - Sarmiento, Chubut</p>
+      <p>Noticias cargadas desde Strapi CMS</p>
+    </div>
   </footer>
 
-  <script>
-    const API_URL = "/api/noticias";
-
-    async function cargarNoticias() {
-      const contenedor = document.getElementById("noticias");
-
-      try {
-        const respuesta = await fetch(API_URL);
-        const resultado = await respuesta.json();
-
-        contenedor.innerHTML = "";
-
-        resultado.data.forEach(noticia => {
-          const card = document.createElement("article");
-          card.className = "card-noticia";
-
-          card.innerHTML = `
-            <div class="card-contenido">
-              <h3>${noticia.titulo}</h3>
-              <p>${noticia.resumen || ""}</p>
-              <a class="boton" href="/api/noticias/${noticia.documentId}" target="_blank">Leer más</a>
-            </div>
-          `;
-
-          contenedor.appendChild(card);
-        });
-
-      } catch (error) {
-        contenedor.innerHTML = "<p>No se pudieron cargar las noticias.</p>";
-        console.error(error);
-      }
-    }
-
-    cargarNoticias();
-  </script>
-
+  <script src="/app.js"></script>
 </body>
 </html>
