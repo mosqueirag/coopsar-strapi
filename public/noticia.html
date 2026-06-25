@@ -8,23 +8,7 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-
-  <header class="site-header">
-    <div class="container header-content">
-      <a class="brand" href="/" aria-label="Ir al inicio">
-        <span class="brand-icon">C</span>
-        <span>
-          <strong>COOPSAR</strong>
-          <small>Detalle de noticia</small>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Navegacion principal">
-        <a href="/">Inicio</a>
-        <a href="/#noticias">Noticias</a>
-      </nav>
-    </div>
-  </header>
+  <header id="siteHeader" class="site-header"></header>
 
   <main class="section detail-page">
     <div class="container">
@@ -34,137 +18,15 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-content">
-      <p>COOPSAR - Sarmiento, Chubut</p>
-      <p>Strapi CMS</p>
-    </div>
-  </footer>
+  <footer id="siteFooter" class="footer"></footer>
 
-  <script>
-    const API_BASE = "";
+  <script type="module">
+    import { renderFooter, renderHeader } from "/js/components.js";
+    import { renderArticle } from "/js/noticia.js";
 
-    function escapeHTML(value = "") {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function formatearFecha(value) {
-      if (!value) return "";
-
-      const fecha = new Date(value);
-      if (Number.isNaN(fecha.getTime())) return "";
-
-      return fecha.toLocaleDateString("es-AR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      });
-    }
-
-    function obtenerImagenUrl(media) {
-      if (!media) return "";
-
-      const imagen = Array.isArray(media) ? media[0] : media;
-      const url = imagen?.formats?.large?.url || imagen?.formats?.medium?.url || imagen?.url;
-
-      if (!url) return "";
-      return url.startsWith("http") ? url : `${API_BASE}${url}`;
-    }
-
-    function convertirRichText(contenido = "") {
-      return String(contenido)
-        .split(/\n{2,}/)
-        .map((bloque) => bloque.trim())
-        .filter(Boolean)
-        .map((bloque) => `<p>${escapeHTML(bloque).replaceAll("\n", "<br>")}</p>`)
-        .join("");
-    }
-
-    async function buscarNoticia({ slug, documentId }) {
-      if (slug) {
-        const params = new URLSearchParams({
-          "filters[slug][$eq]": slug,
-          populate: "imagen_destacada",
-        });
-
-        const respuesta = await fetch(`${API_BASE}/api/noticias?${params.toString()}`);
-        if (!respuesta.ok) throw new Error(`Error ${respuesta.status}`);
-
-        const resultado = await respuesta.json();
-        return resultado.data?.[0];
-      }
-
-      if (documentId) {
-        const params = new URLSearchParams({ populate: "imagen_destacada" });
-        const respuesta = await fetch(`${API_BASE}/api/noticias/${documentId}?${params.toString()}`);
-        if (!respuesta.ok) throw new Error(`Error ${respuesta.status}`);
-
-        const resultado = await respuesta.json();
-        return resultado.data;
-      }
-
-      return null;
-    }
-
-    async function cargarDetalle() {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
-      const documentId = params.get("id");
-      const contenedor = document.getElementById("detalleNoticia");
-
-      try {
-        const noticia = await buscarNoticia({ slug, documentId });
-
-        if (!noticia) {
-          contenedor.innerHTML = `
-            <a href="/#noticias" class="back-link">Volver a noticias</a>
-            <p class="empty-state">No se encontro la noticia solicitada.</p>
-          `;
-          return;
-        }
-
-        const imagenUrl = obtenerImagenUrl(noticia.imagen_destacada);
-        const fecha = formatearFecha(noticia.fecha_publicacion || noticia.publishedAt);
-        const contenido = convertirRichText(noticia.contenido);
-
-        document.title = `${noticia.titulo} | COOPSAR`;
-
-        contenedor.innerHTML = `
-          <a href="/#noticias" class="back-link">Volver a noticias</a>
-          ${
-            imagenUrl
-              ? `<img class="detail-image" src="${escapeHTML(imagenUrl)}" alt="${escapeHTML(noticia.titulo)}">`
-              : ""
-          }
-          <div class="detail-meta">
-            <span class="detail-label">${escapeHTML(noticia.servicio || "Institucional")}</span>
-            ${fecha ? `<time datetime="${escapeHTML(noticia.fecha_publicacion || noticia.publishedAt)}">${escapeHTML(fecha)}</time>` : ""}
-          </div>
-          <h1>${escapeHTML(noticia.titulo)}</h1>
-          ${noticia.resumen ? `<p class="detail-summary">${escapeHTML(noticia.resumen)}</p>` : ""}
-          <div class="detail-content">
-            ${contenido || "<p>Esta noticia todavia no tiene contenido publicado.</p>"}
-          </div>
-        `;
-      } catch (error) {
-        contenedor.innerHTML = `
-          <a href="/#noticias" class="back-link">Volver a noticias</a>
-          <div class="empty-state">
-            <strong>No se pudo cargar la noticia.</strong>
-            <p>Revisa que la API publica de Strapi tenga permisos de lectura.</p>
-          </div>
-        `;
-        console.error(error);
-      }
-    }
-
-    cargarDetalle();
+    renderHeader(document.getElementById("siteHeader"));
+    renderFooter(document.getElementById("siteFooter"));
+    renderArticle();
   </script>
-
 </body>
 </html>

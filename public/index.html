@@ -3,52 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Noticias, comunicados y novedades institucionales de COOPSAR.">
-  <title>COOPSAR | Noticias</title>
+  <meta name="description" content="Sitio institucional de COOPSAR: servicios, tramites, facturas, pagos, reclamos, cortes programados y noticias.">
+  <title>COOPSAR | Cooperativa de Sarmiento</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-
-  <header class="site-header">
-    <div class="container header-content">
-      <a class="brand" href="/" aria-label="Ir al inicio">
-        <span class="brand-icon">C</span>
-        <span>
-          <strong>COOPSAR</strong>
-          <small>Noticias institucionales</small>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Navegacion principal">
-        <a href="/">Inicio</a>
-        <a href="#noticias">Noticias</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-    </div>
-  </header>
+  <header id="siteHeader" class="site-header"></header>
 
   <main>
     <section class="hero">
-      <div class="container hero-content">
-        <span class="eyebrow">Cooperativa de Sarmiento</span>
-        <h1>Informacion clara y cercana para la comunidad.</h1>
-        <p>
-          Comunicados, novedades institucionales y noticias importantes
-          publicadas desde Strapi.
-        </p>
-        <a href="#noticias" class="btn">Ver noticias</a>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Cooperativa de Sarmiento</span>
+          <h1>Servicios esenciales, atencion cercana y gestion simple.</h1>
+          <p>
+            Un espacio digital para consultar novedades, iniciar tramites,
+            pagar facturas y recibir informacion operativa de COOPSAR.
+          </p>
+          <form id="helpSearch" class="help-search" role="search">
+            <label for="helpInput">¿Como podemos ayudarte hoy?</label>
+            <div>
+              <input id="helpInput" type="search" placeholder="Buscar facturas, pagos, reclamos, cortes..." autocomplete="off">
+              <button type="submit">Buscar</button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="hero-panel" aria-label="Atajos principales">
+          <span>Gestion rapida</span>
+          <h2>Todo lo importante en un solo lugar.</h2>
+          <div id="heroQuickLinks" class="hero-actions"></div>
+        </aside>
       </div>
     </section>
 
-    <section class="section" id="noticias">
+    <section class="quick-section" aria-labelledby="quickTitle">
       <div class="container">
         <div class="section-heading">
           <div class="section-title">
-            <span>Actualidad</span>
-            <h2>Ultimas noticias</h2>
-            <p>Contenido actualizado desde el CMS de COOPSAR.</p>
+            <span>Accesos rapidos</span>
+            <h2 id="quickTitle">Resolvelo en pocos pasos</h2>
           </div>
+          <p class="section-note">Consultas frecuentes para socios, usuarios y comercios.</p>
+        </div>
+        <div id="quickAccessGrid" class="quick-grid"></div>
+      </div>
+    </section>
 
+    <section id="servicios" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-title">
+            <span>Servicios</span>
+            <h2>Prestaciones para la comunidad</h2>
+          </div>
+          <a class="pill-link" href="#contacto">Consultar atencion</a>
+        </div>
+        <div id="servicesGrid" class="card-grid"></div>
+      </div>
+    </section>
+
+    <section id="tramites" class="section section-muted">
+      <div class="container two-column">
+        <div>
+          <div class="section-title">
+            <span>Tramites</span>
+            <h2>Gestion online y atencion presencial</h2>
+            <p>El front queda preparado para alimentar estos contenidos desde Strapi.</p>
+          </div>
+          <div id="proceduresList" class="stack-list"></div>
+        </div>
+        <aside class="payment-card" id="facturas">
+          <span>Facturas y pagos</span>
+          <h3>Consulta tu deuda o solicita medios de pago.</h3>
+          <p>Conecta este modulo a un portal de autogestion o a un enlace externo cuando este disponible.</p>
+          <div class="payment-actions">
+            <a href="#contacto">Solicitar ayuda</a>
+            <a href="#tramites">Ver tramites</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="reclamos" class="section">
+      <div class="container operations-grid">
+        <article class="claim-card">
+          <span>Reclamos tecnicos</span>
+          <h2>Reporta inconvenientes de servicio.</h2>
+          <p>Canaliza cortes, baja tension, problemas de conectividad o consultas operativas.</p>
+          <a class="button-pill" href="#contacto">Iniciar reclamo</a>
+        </article>
+
+        <article id="cortes" class="outages-card">
+          <div class="section-title compact">
+            <span>Cortes programados</span>
+            <h2>Alertas operativas</h2>
+          </div>
+          <div id="outagesList" class="outages-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="noticias" class="section section-muted">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-title">
+            <span>Noticias</span>
+            <h2>Actualidad institucional</h2>
+            <p>Noticias cargadas desde Strapi cuando esten publicadas.</p>
+          </div>
           <div class="toolbar" aria-label="Filtros de noticias">
             <label for="servicioFiltro">Servicio</label>
             <select id="servicioFiltro">
@@ -57,43 +120,43 @@
             <span id="noticiasEstado" class="results-count" aria-live="polite"></span>
           </div>
         </div>
-
         <div id="noticiasGrid" class="news-grid">
           <p class="loading">Cargando noticias...</p>
         </div>
       </div>
     </section>
 
-    <section class="info-section">
-      <div class="container info-grid">
-        <article>
-          <span>01</span>
-          <h3>Servicios</h3>
-          <p>Informacion vinculada a energia, telecomunicaciones, pagos y atencion.</p>
-        </article>
+    <section id="adecoop" class="section adecoop-section">
+      <div class="container adecoop-grid">
+        <div>
+          <span class="eyebrow dark">ADECOOP</span>
+          <h2>Beneficios, actividades y comunidad cooperativa.</h2>
+          <p>
+            Un espacio para destacar iniciativas sociales, educativas,
+            culturales y beneficios vinculados a la cooperativa.
+          </p>
+        </div>
+        <div class="adecoop-card">
+          <h3>Proximo paso</h3>
+          <p>Crear en Strapi una coleccion para beneficios o actividades ADECOOP y renderizarla en este bloque.</p>
+        </div>
+      </div>
+    </section>
 
-        <article>
-          <span>02</span>
-          <h3>Comunicados</h3>
-          <p>Avisos importantes para socios, usuarios y comunidad en general.</p>
-        </article>
-
-        <article>
-          <span>03</span>
-          <h3>Institucional</h3>
-          <p>Novedades de gestion, actividades y acciones de la cooperativa.</p>
-        </article>
+    <section id="contacto" class="section contact-section">
+      <div class="container contact-grid">
+        <div class="section-title">
+          <span>Contacto</span>
+          <h2>Estamos para orientarte</h2>
+          <p>Centraliza telefonos, horarios, direccion, guardias y canales digitales.</p>
+        </div>
+        <div id="contactCards" class="contact-cards"></div>
       </div>
     </section>
   </main>
 
-  <footer class="footer" id="contacto">
-    <div class="container footer-content">
-      <p>COOPSAR - Sarmiento, Chubut</p>
-      <p>Noticias cargadas desde Strapi CMS</p>
-    </div>
-  </footer>
+  <footer id="siteFooter" class="footer"></footer>
 
-  <script src="/app.js"></script>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>
