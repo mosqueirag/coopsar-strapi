@@ -1,16 +1,13 @@
-import { getCortesProgramados, getNoticias, getServicios, getTramites } from "./api.js";
+import { getCortesProgramados, getMediosDePago, getNoticias, getServicios, getTramites } from "./api.js";
 import {
   contactItems,
-  fallbackNews,
-  fallbackOutages,
-  fallbackProcedures,
-  fallbackServices,
   quickLinks,
 } from "./data.js";
 import {
   contactCard,
   newsCard,
   outageItem,
+  paymentMethodItem,
   procedureItem,
   quickCard,
   renderFooter,
@@ -23,6 +20,46 @@ const services = ["Energia", "Telecomunicaciones", "Sepelio", "Institucional", "
 function setHTML(selector, html) {
   const node = document.querySelector(selector);
   if (node) node.innerHTML = html;
+}
+
+function loadingHTML(message) {
+  return `<p class="loading">${message}</p>`;
+}
+
+function emptyHTML(message) {
+  return `<p class="empty-state">${message}</p>`;
+}
+
+function errorHTML(message) {
+  return `
+    <div class="empty-state error-state">
+      <strong>No se pudo cargar esta seccion.</strong>
+      <p>${message}</p>
+    </div>
+  `;
+}
+
+async function renderRemoteSection({ selector, loader, renderItem, loading, empty, error }) {
+  const node = document.querySelector(selector);
+  if (!node) return [];
+
+  node.innerHTML = loadingHTML(loading);
+
+  try {
+    const data = await loader();
+
+    if (!data.length) {
+      node.innerHTML = emptyHTML(empty);
+      return [];
+    }
+
+    node.innerHTML = data.map(renderItem).join("");
+    return data;
+  } catch (err) {
+    console.warn(err);
+    node.innerHTML = errorHTML(error || err.message || "Revisa la conexion con Strapi.");
+    return [];
+  }
 }
 
 function renderStaticBlocks() {
@@ -42,48 +79,73 @@ function renderStaticBlocks() {
   filter.addEventListener("change", () => renderNews(filter.value));
 }
 
-async function withFallback(fetcher, fallback) {
-  try {
-    const data = await fetcher();
-    return data.length ? data : fallback;
-  } catch (error) {
-    console.warn(error);
-    return fallback;
-  }
-}
-
 async function renderServices() {
-  const data = await withFallback(getServicios, fallbackServices);
-  setHTML("#servicesGrid", data.map(serviceCard).join(""));
+  await renderRemoteSection({
+    selector: "#servicesGrid",
+    loader: getServicios,
+    renderItem: serviceCard,
+    loading: "Cargando servicios...",
+    empty: "Todavia no hay servicios publicados.",
+    error: "Configura el content-type servicios o revisa STRAPI_API_URL y STRAPI_API_TOKEN.",
+  });
 }
 
 async function renderProcedures() {
-  const data = await withFallback(getTramites, fallbackProcedures);
-  setHTML("#proceduresList", data.map(procedureItem).join(""));
+  await renderRemoteSection({
+    selector: "#proceduresList",
+    loader: getTramites,
+    renderItem: procedureItem,
+    loading: "Cargando tramites...",
+    empty: "Todavia no hay tramites publicados.",
+    error: "Configura el content-type tramites o revisa los permisos del token.",
+  });
+}
+
+async function renderPaymentMethods() {
+  await renderRemoteSection({
+    selector: "#paymentMethodsList",
+    loader: getMediosDePago,
+    renderItem: paymentMethodItem,
+    loading: "Cargando medios de pago...",
+    empty: "Todavia no hay medios de pago publicados.",
+    error: "Configura el content-type medios-de-pagos o revisa los permisos del token.",
+  });
 }
 
 async function renderOutages() {
-  const data = await withFallback(getCortesProgramados, fallbackOutages);
-  setHTML("#outagesList", data.map(outageItem).join(""));
+  await renderRemoteSection({
+    selector: "#outagesList",
+    loader: getCortesProgramados,
+    renderItem: outageItem,
+    loading: "Cargando cortes programados...",
+    empty: "No hay cortes programados informados.",
+    error: "Configura el content-type cortes-programados o revisa los permisos del token.",
+  });
 }
 
 async function renderNews(service = "") {
   const grid = document.getElementById("noticiasGrid");
   const count = document.getElementById("noticiasEstado");
 
-  grid.innerHTML = `<p class="loading">Cargando noticias...</p>`;
+  grid.innerHTML = loadingHTML("Cargando noticias...");
   count.textContent = "";
 
-  const data = await withFallback(() => getNoticias(service), service ? [] : fallbackNews);
+  try {
+    const data = await getNoticias(service);
 
-  if (!data.length) {
-    grid.innerHTML = `<p class="empty-state">No hay noticias publicadas para este servicio.</p>`;
-    count.textContent = "Sin resultados";
-    return;
+    if (!data.length) {
+      grid.innerHTML = emptyHTML(service ? "No hay noticias publicadas para este servicio." : "Todavia no hay noticias publicadas.");
+      count.textContent = "Sin resultados";
+      return;
+    }
+
+    grid.innerHTML = data.map(newsCard).join("");
+    count.textContent = `${data.length} ${data.length === 1 ? "noticia" : "noticias"}`;
+  } catch (error) {
+    console.warn(error);
+    grid.innerHTML = errorHTML("Revisa la conexion con Strapi y los permisos de lectura para noticias.");
+    count.textContent = "Error";
   }
-
-  grid.innerHTML = data.map(newsCard).join("");
-  count.textContent = `${data.length} ${data.length === 1 ? "noticia" : "noticias"}`;
 }
 
 function setupSearch() {
@@ -111,5 +173,6 @@ renderStaticBlocks();
 setupSearch();
 renderServices();
 renderProcedures();
+renderPaymentMethods();
 renderOutages();
 renderNews();

@@ -117,6 +117,16 @@ export function procedureItem(item) {
   `;
 }
 
+export function paymentMethodItem(item) {
+  return `
+    <article class="payment-method">
+      <strong>${escapeHTML(item.titulo || item.nombre || "Medio de pago")}</strong>
+      <span>${escapeHTML(item.tipo || item.categoria || "Disponible")}</span>
+      <p>${escapeHTML(item.resumen || item.descripcion || "Informacion administrable desde Strapi.")}</p>
+    </article>
+  `;
+}
+
 export function outageItem(item) {
   const date = formatDate(item.fecha || item.fecha_inicio);
   return `

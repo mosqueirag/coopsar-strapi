@@ -530,6 +530,38 @@ a {
   margin-top: 24px;
 }
 
+.payment-methods {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.payment-method {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--green-50);
+}
+
+.payment-method strong {
+  color: var(--green-950);
+}
+
+.payment-method span {
+  color: var(--green-600);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payment-method p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .payment-actions a + a {
   background: var(--green-100);
   color: var(--green-850);
@@ -801,6 +833,15 @@ a {
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+}
+
+.error-state {
+  border-color: rgba(176, 66, 32, 0.28);
+  background: #fff7f3;
+}
+
+.error-state strong {
+  color: #8f321d;
 }
 
 .footer {

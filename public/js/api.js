@@ -1,48 +1,34 @@
-const API_BASE = "";
+const FRONTEND_API = "/api/frontend";
 
-async function fetchCollection(endpoint, params = {}) {
+async function fetchFrontendCollection(endpoint, params = {}) {
   const search = new URLSearchParams(params);
-  const response = await fetch(`${API_BASE}/api/${endpoint}?${search.toString()}`);
+  const suffix = search.toString() ? `?${search.toString()}` : "";
+  const response = await fetch(`${FRONTEND_API}/${endpoint}${suffix}`);
+  const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(`Strapi ${endpoint}: ${response.status}`);
+    throw new Error(payload?.error?.message || `No se pudo cargar ${endpoint}.`);
   }
 
-  const payload = await response.json();
   return payload.data || [];
 }
 
 export async function getNoticias(servicio = "") {
-  const params = {
-    "sort[0]": "fecha_publicacion:desc",
-    "sort[1]": "publishedAt:desc",
-    populate: "imagen_destacada",
-    "pagination[pageSize]": "6",
-  };
-
-  if (servicio) params["filters[servicio][$eq]"] = servicio;
-  return fetchCollection("noticias", params);
+  return fetchFrontendCollection("noticias", servicio ? { servicio } : {});
 }
 
 export async function getServicios() {
-  return fetchCollection("servicios", {
-    "sort[0]": "orden:asc",
-    "sort[1]": "titulo:asc",
-    populate: "*",
-  });
+  return fetchFrontendCollection("servicios");
 }
 
 export async function getTramites() {
-  return fetchCollection("tramites", {
-    "sort[0]": "orden:asc",
-    "sort[1]": "titulo:asc",
-    populate: "*",
-  });
+  return fetchFrontendCollection("tramites");
+}
+
+export async function getMediosDePago() {
+  return fetchFrontendCollection("medios-de-pago");
 }
 
 export async function getCortesProgramados() {
-  return fetchCollection("cortes-programados", {
-    "sort[0]": "fecha:asc",
-    populate: "*",
-  });
+  return fetchFrontendCollection("cortes-programados");
 }
